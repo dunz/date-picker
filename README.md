@@ -1,17 +1,10 @@
-## Stack
+## 1. 달력만들기
 
--   번들러: `Vite`
--   SPA 프레임웍: `React`
--   언어: `Typescript`
--   코드검사: `eslint`
--   코드검사 플러그인:
-    -   `@typescript-eslint`
-    -   `eslint-plugin-react`
-    -   `eslint-config-prettier`
--   코드스타일: `prettier`
+### Step.1 이번달 달력 데이터 구하기
 
-## Vite알아보고 스캐폴딩 구성하기
+> 지난달 날짜들, 현재달 날짜들, 다음달 날짜들 합쳐서 노출해주기
 
-### [Vite 특징알아보기](vite.md)
-
-### [스캐폴딩 구성하기](vite-tutorial.md)
+1. 지난달의 마지막 날짜와 요일 => 지난달 날짜들
+    - new Date(2021, 9) => 10월의 1일, new Date(2021, 9, 0) => 9월의 마지막 날짜
+2. 이번달의 마지막 날짜와 요일 => 다음달 날짜들
+    - new Date(2021, 9+1) => 11월의 1일, new Date(2021, 9+1, 0) => 10월의 마지막 날짜

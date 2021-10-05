@@ -1,9 +1,28 @@
 import styled from 'styled-components';
 
+import { CommonButton } from '../styles/common';
+
 export const Styled = {
     Calendar: styled.article`
-        & > h1 {
+        text-align: center;
+        user-select: none;
+        & > dl {
             margin-bottom: 20px;
+            & > dt,
+            & > dd {
+                display: flex;
+                justify-content: center;
+                gap: 0.5em;
+                padding: 0.3em 0;
+                &:hover {
+                    button {
+                        opacity: 1;
+                        &:active {
+                            opacity: 0.7;
+                        }
+                    }
+                }
+            }
         }
         & > ul {
             list-style: none;
@@ -46,5 +65,13 @@ export const Styled = {
                 }
             }
         }
+    `,
+    ChangeDateButton: styled(CommonButton)`
+        border: none;
+        padding: 0 1em;
+        border-radius: 0.5em;
+        font-weight: bold;
+        transition: opacity 0.1s;
+        opacity: 0;
     `
 };

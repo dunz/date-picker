@@ -1,45 +1,82 @@
 import classNames from 'classnames';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { range } from '../utils';
 
 import { Styled } from './styles';
 
-const getDates = (date = new Date()) => {
-    const prevLast = new Date(date.getFullYear(), date.getMonth(), 0);
-    const prevLastDate = prevLast.getDate();
-    const prevLastDay = prevLast.getDay();
+enum Direction {
+    Prev = -1,
+    Next = 1
+}
 
-    const thisLast = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-    const thisLastDate = thisLast.getDate();
-    const thisLastDay = thisLast.getDay();
+const MONTH_RANGE = { MIN: 0, MAX: 11 };
 
-    const prevDates = prevLastDay === 6 ? [] : range(prevLastDate - prevLastDay, prevLastDate);
-    const thisDates = range(1, thisLastDate);
-    const nextDates = range(1, 7 - (thisLastDay + 1));
+const useDates = (year: number, month: number) =>
+    useMemo(() => {
+        const prevLast = new Date(year, month, 0);
+        const prevLastDate = prevLast.getDate();
+        const prevLastDay = prevLast.getDay();
 
-    return {
-        prevDates,
-        thisDates,
-        nextDates
-    };
-};
+        const thisLast = new Date(year, month + 1, 0);
+        const thisLastDate = thisLast.getDate();
+        const thisLastDay = thisLast.getDay();
+
+        const prevDates = prevLastDay === 6 ? [] : range(prevLastDate - prevLastDay, prevLastDate);
+        const thisDates = range(1, thisLastDate);
+        const nextDates = range(1, 7 - (thisLastDay + 1));
+        return {
+            prevDates,
+            thisDates,
+            nextDates
+        };
+    }, [year, month]);
 
 export const Calendar: React.VFC = () => {
-    const [date] = useState(new Date(2021, 9, 20));
-    const { prevDates, thisDates, nextDates } = getDates(date);
+    const today = useMemo(() => new Date(), []);
+    const [year, setYear] = useState(today.getFullYear());
+    const [month, setMonth] = useState(today.getMonth());
+    const { prevDates, thisDates, nextDates } = useDates(year, month);
+
     const isToday = useCallback(
-        (d: number): boolean => {
-            return d === date.getDate();
+        (date: number): boolean => year === today.getFullYear() && month === today.getMonth() && date === today.getDate(),
+        [today, year, month]
+    );
+
+    const changeYear = useCallback(
+        (direction: Direction) => {
+            setYear(year + direction);
         },
-        [date]
+        [year]
+    );
+    const changeDate = useCallback(
+        (direction: Direction) => {
+            let updateMonth = month + direction;
+            if (updateMonth < MONTH_RANGE.MIN) {
+                updateMonth = MONTH_RANGE.MAX;
+                setYear(year - 1);
+            }
+            if (updateMonth > MONTH_RANGE.MAX) {
+                updateMonth = MONTH_RANGE.MIN;
+                setYear(year + 1);
+            }
+            setMonth(updateMonth);
+        },
+        [year, month]
     );
 
     return (
         <Styled.Calendar>
-            <h1>
-                {date.getFullYear()} 년 {date.getMonth() + 1} 월
-            </h1>
+            <dl>
+                <dt>
+                    <Styled.ChangeDateButton onClick={() => changeYear(Direction.Prev)}>&lt;</Styled.ChangeDateButton>
+                    {year} 년<Styled.ChangeDateButton onClick={() => changeYear(Direction.Next)}>&gt;</Styled.ChangeDateButton>
+                </dt>
+                <dd>
+                    <Styled.ChangeDateButton onClick={() => changeDate(Direction.Prev)}>&lt;</Styled.ChangeDateButton>
+                    {month + 1} 월<Styled.ChangeDateButton onClick={() => changeDate(Direction.Next)}>&gt;</Styled.ChangeDateButton>
+                </dd>
+            </dl>
             <ul className="calendar">
                 <li className="weekday">일</li>
                 <li className="weekday">월</li>

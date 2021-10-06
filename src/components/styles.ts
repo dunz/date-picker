@@ -63,6 +63,21 @@ export const Styled = {
                     height: 1.8em;
                     border: 3px solid red;
                 }
+
+                &.selected:before {
+                    content: '';
+                    position: absolute;
+                    box-sizing: border-box;
+                    display: block;
+                    left: 50%;
+                    top: 50%;
+                    transform: translate(-50%, -50%);
+                    border-radius: 100%;
+                    width: 1.8em;
+                    height: 1.8em;
+                    background: blue;
+                    opacity: 0.5;
+                }
             }
         }
     `,

@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import React, { useCallback, useMemo, useState } from 'react';
 
 import { range } from '../utils';
@@ -110,11 +110,7 @@ export const Calendar: React.VFC<Calendar> = ({ value, onChange }: Calendar) => 
                         </li>
                     ))}
                     {thisDates.map((date, index) => (
-                        <li
-                            key={index}
-                            className={classNames({ today: isToday(date), selected: isSelected(date) })}
-                            onClick={() => onClickDate(date)}
-                        >
+                        <li key={index} className={clsx({ today: isToday(date), selected: isSelected(date) })} onClick={() => onClickDate(date)}>
                             {date}
                         </li>
                     ))}

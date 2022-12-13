@@ -24,7 +24,7 @@ const useDates = (year: number, month: number) =>
 
         const prevDates = prevLastDay === 6 ? [] : range(prevLastDate - prevLastDay, prevLastDate);
         const thisDates = range(1, thisLastDate);
-        const nextDates = range(1, 7 - (thisLastDay + 1));
+        const nextDates = range(1, 6 - thisLastDay);
         return {
             prevDates,
             thisDates,
